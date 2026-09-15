@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Gemini — ChatGPT-inspired theme
 @namespace      local.gemini.theme
-@version        0.5.7
+@version        0.5.8
 @description    Local presentation-only theme. No scripts or external resources.
 @author         Local
 ==/UserStyle== */
@@ -614,6 +614,12 @@
   }
 
   /* Hide the Gemini AI disclaimer and reclaim its layout space. */
+  /* Match the send button to the conversation-bubble orange accent, including dark mode. */
+  input-container .send-button-container button {
+    background-color: var(--local-gemini-bubble) !important;
+    color: var(--local-gemini-text) !important;
+  }
+
   input-container > hallucination-disclaimer {
     display: none !important;
   }
