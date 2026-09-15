@@ -1,0 +1,719 @@
+/* ==UserStyle==
+@name           Gemini — ChatGPT-inspired theme
+@namespace      local.gemini.theme
+@version        0.5.7
+@description    Local presentation-only theme. No scripts or external resources.
+@author         Local
+==/UserStyle== */
+
+@-moz-document domain("gemini.google.com") {
+  /* Theme settings: ChatGPT system font, white surfaces, orange prompt bubbles, and your chosen weights and widths. */
+  body {
+    --local-gemini-font: -apple-system-body, ui-sans-serif, -apple-system,
+      system-ui, "Segoe UI", Helvetica, "Apple Color Emoji", Arial,
+      sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+    --local-gemini-page: #ffffff;
+    --local-gemini-sidebar: #ffffff;
+    --local-gemini-sidebar-divider: rgb(0 0 0 / 5%);
+    --local-gemini-composer: #ffffff;
+    --local-gemini-text: #202123;
+    --local-gemini-border: #eeeeee;
+    --local-gemini-bubble: #fff0e2;
+    --local-gemini-muted: #8f8f8f;
+    --local-gemini-body-weight: 480;
+    --local-gemini-bold-weight: 720;
+    --local-gemini-heading-weight: 600;
+    --local-gemini-ui-weight: 500;
+    --local-gemini-conversation-width: 850px;
+    --local-gemini-composer-width: 768px;
+    --local-gemini-compact-padding: 12px;
+    --local-gemini-leading-width: 40px;
+    --local-gemini-control-gap: 8px;
+    --local-gemini-prompt-preview: 264px;
+    /* Tighter prose spacing: 16px font × 1.4 = 22.4px; composer spacing is separate. */
+    --local-gemini-body-line-height: 1.4;
+    --local-gemini-chat-selected: #efefef;
+    --local-gemini-chat-hover: #f5f5f5;
+  }
+
+  /* Use the same system font across the interface; reset Gemini variable-font axes so font weights actually apply. */
+  body, button, textarea, input,
+  [class*="gds-body"], [class*="gds-title"], [class*="gds-display"],
+  .mdc-list-item__primary-text, .mdc-button__label,
+  .sidenav-with-history-container :is(p, a, button, span),
+  message-content .markdown,
+  message-content .markdown :is(p, li, strong, em, a, h1, h2, h3, h4, h5, h6),
+  user-query .query-text, user-query .query-text-line,
+  rich-textarea .ql-editor, rich-textarea .ql-editor::before,
+  input-container .input-area-switch,
+  input-container .picker-primary-text {
+    font-family: var(--local-gemini-font) !important;
+    letter-spacing: normal !important;
+    font-variation-settings: normal !important;
+    font-stretch: normal !important;
+  }
+
+  message-content .markdown :is(span, b, a):not(pre *, code *) {
+    font-variation-settings: normal !important;
+    font-stretch: normal !important;
+  }
+
+  input-container .picker-primary-text {
+    font-weight: 500 !important;
+    color: var(--local-gemini-muted) !important;
+  }
+
+  /* Dark-theme equivalents for the same surfaces and orange accent. */
+  body.dark-theme {
+    --local-gemini-page: #212121;
+    --local-gemini-sidebar: #171717;
+    --local-gemini-sidebar-divider: rgb(255 255 255 / 10%);
+    --local-gemini-composer: #303030;
+    --local-gemini-text: #ececec;
+    --local-gemini-border: #424242;
+    --local-gemini-bubble: #463225;
+    --local-gemini-muted: #aaaaaa;
+    --local-gemini-chat-selected: #303030;
+    --local-gemini-chat-hover: #262626;
+  }
+
+  body, main.chat-app, chat-window, input-container {
+    background: var(--local-gemini-page) !important;
+  }
+
+  bard-sidenav, side-navigation-content, .sidenav-with-history-container {
+    background: var(--local-gemini-sidebar) !important;
+  }
+
+  /* Sidebar: subtle right divider and 259.2px expanded width (10% smaller than the original 288px). Collapsed sizing remains native. */
+  bard-sidenav {
+    --bard-sidenav-open-width: 259.2px !important;
+    border-right: 1px solid var(--local-gemini-sidebar-divider) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Hide only the sparkle SVG container; keep the Gemini text and its New chat link. */
+  a[data-test-id="side-nav-sparkle-button"] .xap-count-badge-container {
+    display: none !important;
+  }
+
+  /* Hide the sidebar Chat / Spark beta switch. */
+  .app-tabs:has(> button[data-test-id="app-tab-chat"]) {
+    display: none !important;
+  }
+
+  /* Make the Recent section label bolder (700), independently of chat titles. */
+  bard-sidenav button[aria-controls="sidenav-section-content-chats"] .expandable-section-title {
+    font-family: var(--local-gemini-font) !important;
+    font-variation-settings: normal !important;
+    font-weight: 700 !important;
+  }
+
+  /* Hide the entire Notebooks section, including New notebook. */
+  bard-sidenav expandable-section:has(button[aria-label="Toggle Notebooks"]) {
+    display: none !important;
+  }
+
+  /* Sidebar chat rows: rounded corners, with larger 16px / 600 titles below and a soft gray selected fill. */
+  bard-sidenav conversations-list a.gem-nav-list-item {
+    min-height: 36px !important;
+    height: 36px !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+  }
+
+  bard-sidenav conversations-list a.gem-nav-list-item .mdc-list-item__primary-text,
+  bard-sidenav conversations-list a.gem-nav-list-item .mdc-list-item__content {
+    font-family: var(--local-gemini-font) !important;
+    font-variation-settings: normal !important;
+    font-size: 16px !important;
+    line-height: 22px !important;
+    font-weight: 600 !important;
+  }
+
+  bard-sidenav conversations-list a.gem-nav-list-item:hover {
+    background: var(--local-gemini-chat-hover) !important;
+  }
+
+  bard-sidenav conversations-list a.gem-nav-list-item:is(.is-active, .mdc-list-item--activated, [aria-current="page"]) {
+    background: var(--local-gemini-chat-selected) !important;
+  }
+
+  /* Reduce the welcome heading to 24px and use the requested 500 weight. */
+  chat-window .lm-mobile-sparkle-and-text h1.gds-display-m {
+    font-family: var(--local-gemini-font) !important;
+    font-variation-settings: normal !important;
+    font-size: 24px !important;
+    line-height: 32px !important;
+    font-weight: 500 !important;
+    letter-spacing: normal !important;
+  }
+
+  message-content .markdown, user-query .query-text,
+  rich-textarea .ql-editor {
+    font-family: var(--local-gemini-font) !important;
+    font-size: 16px !important;
+    line-height: var(--local-gemini-body-line-height) !important;
+    color: var(--local-gemini-text) !important;
+  }
+
+  message-content .markdown :is(pre, code) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  }
+
+  /* Submitted prompts use your preferred orange tint instead of green. */
+  user-query .user-query-bubble-with-background {
+    background: var(--local-gemini-bubble) !important;
+    border-radius: 22px !important;
+    padding: 12px 16px !important;
+  }
+
+  user-query .luminous-toggle-container {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  user-query .luminous-toggle-button,
+  user-query .luminous-actions-container button {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    color: #777 !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 6px !important;
+  }
+
+  user-query :is(.luminous-toggle-button, .luminous-actions-container button) mat-icon {
+    font-size: 20px !important;
+    width: 20px !important;
+    height: 20px !important;
+    line-height: 20px !important;
+    color: inherit !important;
+  }
+
+  user-query :is(.luminous-toggle-button, .luminous-actions-container button):hover {
+    background: rgb(0 0 0 / 5%) !important;
+  }
+
+  user-query .luminous-actions-container {
+    gap: 4px !important;
+    padding-inline: 8px !important;
+  }
+
+  /* Show a taller submitted-prompt preview (264px); fade only overflowing text and retain the native expand action. */
+  user-query .luminous-collapsed .query-text.collapsed {
+    height: auto !important;
+    max-height: var(--local-gemini-prompt-preview) !important;
+    overflow: hidden !important;
+    transition: none !important;
+  }
+
+  user-query .local-prompt-overflow.luminous-collapsed .query-text.collapsed {
+    mask-image: linear-gradient(to bottom, black calc(100% - 36px), transparent) !important;
+    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 36px), transparent) !important;
+  }
+
+  user-query .luminous-toggle-container {
+    position: static !important;
+    inset: auto !important;
+    width: auto !important;
+    height: auto !important;
+    margin-top: 8px !important;
+  }
+
+  user-query .luminous-expand-fade {
+    display: none !important;
+  }
+
+  user-query .luminous-toggle-button {
+    position: static !important;
+    inset: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: auto !important;
+    padding: 4px 0 !important;
+    font-family: var(--local-gemini-font) !important;
+    font-variation-settings: normal !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+  }
+
+  /* Replace the icon-only expansion pill with Show more / Show less text. */
+  user-query .luminous-toggle-button::before {
+    content: "Show less";
+  }
+
+  user-query .luminous-collapsed .luminous-toggle-button::before {
+    content: "Show more";
+  }
+
+  user-query .luminous-toggle-pill {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  user-query .local-prompt-sizing-ready:not(.local-prompt-overflow) .luminous-toggle-container {
+    display: none !important;
+  }
+
+  /* Composer: rounded compact shell; subsequent grid rules place text and controls on one aligned row. */
+  input-container .text-input-field {
+    background: var(--local-gemini-composer) !important;
+    border: 1px solid var(--local-gemini-border) !important;
+    border-radius: 28px !important;
+    box-shadow: 0 2px 12px rgb(0 0 0 / 4%) !important;
+    box-sizing: border-box !important;
+    min-height: 52px !important;
+    padding: 3px var(--local-gemini-compact-padding) !important;
+  }
+
+  input-container .text-input-field:has(.ql-editor.ql-blank) {
+    min-height: 52px !important;
+    height: auto !important;
+  }
+
+  input-container .text-input-field {
+    display: grid !important;
+    transition: none !important;
+    grid-template-columns: var(--local-gemini-leading-width) minmax(0, 1fr) auto !important;
+    grid-template-rows: auto auto minmax(44px, auto) !important;
+    grid-template-areas:
+      "banner banner banner"
+      "file-preview file-preview file-preview"
+      "leading-actions text-input trailing-actions" !important;
+    align-items: center !important;
+    column-gap: var(--local-gemini-control-gap) !important;
+  }
+
+  input-container .text-input-field > :is(.single-line-format, .text-input-field_textarea-wrapper) {
+    grid-area: text-input !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  input-container .text-input-field-main-area {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Reserve real space for the plus button so typed text cannot overlap it. */
+  input-container .leading-actions-wrapper {
+    grid-area: leading-actions !important;
+    align-self: center !important;
+    width: var(--local-gemini-leading-width) !important;
+    min-width: var(--local-gemini-leading-width) !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  input-container .leading-actions-wrapper simplified-input-menu,
+  input-container .leading-actions-wrapper .simplified-input-menu-container {
+    width: 32px !important;
+    min-width: 32px !important;
+    margin: 0 !important;
+  }
+
+  /* Center the model picker, microphone, and send button vertically. */
+  input-container .trailing-actions-wrapper {
+    grid-area: trailing-actions !important;
+    align-self: center !important;
+    display: flex !important;
+    align-items: center !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    margin-block: 0 !important;
+    padding-block: 0 !important;
+  }
+
+  input-container .trailing-actions-wrapper :is(.model-picker-container, .input-buttons-wrapper-bottom, .mic-button-container, .gem-mic-button-wrapper, .send-button-container) {
+    display: flex !important;
+    align-items: center !important;
+    align-self: center !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    margin-block: 0 !important;
+    padding-block: 0 !important;
+  }
+
+  input-container rich-textarea .ql-editor {
+    padding-inline: 0 !important;
+  }
+
+  /* Short inputs stay compact; expansion is controlled by the sizing helper rather than sticky native classes. */
+  input-container .text-input-field:not(.local-gemini-expanded) :is(.text-input-field_textarea-wrapper, .text-input-field-main-area, .text-input-field_textarea-inner, .textarea-wrapper, rich-textarea, .ql-editor) {
+    height: auto !important;
+    min-height: 0 !important;
+    margin-block: 0 !important;
+    padding-block: 0 !important;
+    mask: none !important;
+    -webkit-mask: none !important;
+  }
+
+  input-container .text-input-field:not(.local-gemini-expanded) .ql-editor {
+    max-height: 78px !important;
+    overflow-y: auto !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  input-container rich-textarea .ql-editor p {
+    margin: 0 !important;
+  }
+
+  /* The local sizing helper detects actual wrapping rather than Google's sticky class. */
+  input-container .text-input-field:is(.local-gemini-expanded, :not(.local-gemini-sizing-ready):has(.ql-editor > :nth-child(2))) {
+    height: auto !important;
+    padding: 16px 16px 6px !important;
+    grid-template-rows: auto auto auto minmax(44px, auto) !important;
+    grid-template-areas:
+      "banner banner banner"
+      "file-preview file-preview file-preview"
+      "text-input text-input text-input"
+      "leading-actions . trailing-actions" !important;
+    row-gap: 8px !important;
+    border-radius: 28px !important;
+  }
+
+  input-container .text-input-field:is(.local-gemini-expanded, :not(.local-gemini-sizing-ready):has(.ql-editor > :nth-child(2))) .text-input-field_textarea-wrapper {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  input-container .text-input-field:is(.local-gemini-expanded, :not(.local-gemini-sizing-ready):has(.ql-editor > :nth-child(2))) :is(.text-input-field-main-area, .text-input-field_textarea-inner, .textarea-wrapper, rich-textarea) {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  input-container .text-input-field:is(.local-gemini-expanded, :not(.local-gemini-sizing-ready):has(.ql-editor > :nth-child(2))) rich-textarea .ql-editor {
+    height: auto !important;
+    max-height: min(40vh, 280px) !important;
+    overflow-y: auto !important;
+    padding: 0 12px 4px 0 !important;
+    scrollbar-width: thin;
+    scrollbar-color: #c4c4c4 transparent !important;
+    padding-block: 10px !important;
+    mask-image: linear-gradient(to bottom,
+      transparent, black 10px, black calc(100% - 10px), transparent),
+      linear-gradient(black, black) !important;
+    mask-size: calc(100% - 8px) 100%, 8px 100% !important;
+    mask-position: left top, right top !important;
+    mask-repeat: no-repeat !important;
+    -webkit-mask-image: linear-gradient(to bottom,
+      transparent, black 10px, black calc(100% - 10px), transparent),
+      linear-gradient(black, black) !important;
+    -webkit-mask-size: calc(100% - 8px) 100%, 8px 100% !important;
+    -webkit-mask-position: left top, right top !important;
+    -webkit-mask-repeat: no-repeat !important;
+  }
+
+  /* Keep a slim gray scrollbar thumb with no visible rail, border, or arrow buttons. */
+  input-container rich-textarea .ql-editor::-webkit-scrollbar {
+    width: 6px !important;
+    background: transparent !important;
+  }
+
+  input-container rich-textarea .ql-editor::-webkit-scrollbar-track,
+  input-container rich-textarea .ql-editor::-webkit-scrollbar-track-piece {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  input-container rich-textarea .ql-editor::-webkit-scrollbar-thumb {
+    background: #c4c4c4 !important;
+    border: none !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
+  }
+
+  input-container rich-textarea .ql-editor::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  input-container .text-input-field:focus-within {
+    border-color: #c7c7c7 !important;
+  }
+
+  input-container input-area-v2 {
+    box-shadow: none !important;
+    border-radius: 28px !important;
+  }
+
+  /* Remove Gemini’s broad shadow / gradient above the floating composer. */
+  input-container.input-gradient::before {
+    content: none !important;
+    background: none !important;
+    box-shadow: none !important;
+  }
+
+  message-content .markdown p {
+    margin-block: 0 16px !important;
+  }
+
+  message-content .markdown :is(ul, ol) {
+    padding-inline-start: 24px !important;
+  }
+
+  message-content .markdown li {
+    margin-block: 8px !important;
+  }
+
+  message-content .markdown ul,
+  message-content .markdown ul > li {
+    list-style-type: disc !important;
+  }
+
+  message-content .markdown ul > li::marker {
+    content: "" !important;
+    font-size: 6px !important;
+    font-weight: 900 !important;
+    color: var(--local-gemini-text) !important;
+  }
+
+  message-content .markdown ul > li {
+    display: list-item !important;
+    position: relative !important;
+    padding-inline-start: 0 !important;
+  }
+
+  /* Replace hollow SVG bullets with solid 6px circles centered against the first line (1.4 line height). */
+  message-content .markdown ul > li::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    width: 6px !important;
+    height: 6px !important;
+    inset-inline-start: -18px !important;
+    top: calc(0.7em - 3px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    background: var(--local-gemini-text) !important;
+    mask: none !important;
+    -webkit-mask: none !important;
+  }
+
+  message-content .markdown,
+  message-content .markdown :is(p, li),
+  user-query .query-text, user-query .query-text-line,
+  rich-textarea .ql-editor {
+    font-weight: var(--local-gemini-body-weight) !important;
+  }
+
+  /* Keep intentional emphasis at 720 while ordinary text uses 480. */
+  message-content .markdown :is(strong, b) {
+    font-weight: var(--local-gemini-bold-weight) !important;
+  }
+
+  message-content .markdown :is(ul, ol) :is(li, p, span, a, em, div):not(pre *, code *, .katex *, strong *, b *, button *) {
+    font-family: var(--local-gemini-font) !important;
+    font-variation-settings: normal !important;
+    font-stretch: normal !important;
+    font-weight: inherit !important;
+    line-height: var(--local-gemini-body-line-height) !important;
+    letter-spacing: normal !important;
+  }
+
+  /* Apply the prose font through nested renderers without changing code, math or icons. */
+  message-content .markdown :where(*):not(pre, pre *, code, code *, kbd, kbd *, samp, samp *, .katex, .katex *, mjx-container, mjx-container *, mat-icon, mat-icon *, gem-icon, gem-icon *, svg, svg *) {
+    font-family: var(--local-gemini-font) !important;
+    font-variation-settings: normal !important;
+    font-stretch: normal !important;
+    letter-spacing: normal !important;
+  }
+
+  message-content .markdown :is(p, li, span, div, a, em):not(pre *, code *, kbd *, samp *, .katex *, mjx-container *, mat-icon *, gem-icon *, svg *, strong *, b *, button *) {
+    font-weight: inherit !important;
+  }
+
+  message-content .markdown :is(strong, b),
+  message-content .markdown :is(strong, b) :is(span, a, em) {
+    font-weight: var(--local-gemini-bold-weight) !important;
+  }
+
+  /* Cover all heading levels and their nested spans so headings cannot retain the old font styling. */
+  message-content .markdown :is(h1, h2, h3, h4, h5, h6),
+  message-content .markdown :is(h1, h2, h3, h4, h5, h6) :is(span, a, em, strong, b) {
+    font-family: var(--local-gemini-font) !important;
+    font-variation-settings: normal !important;
+    font-stretch: normal !important;
+    font-weight: var(--local-gemini-heading-weight) !important;
+    line-height: 1.4 !important;
+    letter-spacing: normal !important;
+  }
+
+  rich-textarea .ql-editor {
+    line-height: 26px !important;
+  }
+
+  /* Placeholder: muted gray, vertically aligned, with the requested 500 weight. */
+  rich-textarea .ql-editor.ql-blank::before {
+    font-variation-settings: normal !important;
+    font-family: var(--local-gemini-font) !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    line-height: 26px !important;
+    color: var(--local-gemini-muted) !important;
+    opacity: 1 !important;
+  }
+
+  input-container .input-area-switch,
+  input-container .input-area-switch .picker-primary-text {
+    font-family: var(--local-gemini-font) !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 24px !important;
+    color: var(--local-gemini-muted) !important;
+  }
+
+  input-container .input-area-switch {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border-radius: 16px !important;
+    padding-inline: 8px !important;
+  }
+
+  input-container .input-area-switch .mdc-button__label,
+  input-container .input-area-switch .input-area-switch-label {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: auto !important;
+    margin-block: 0 !important;
+  }
+
+  input-container .input-area-switch .picker-primary-text {
+    display: block !important;
+    line-height: 24px !important;
+    margin-block: 0 !important;
+  }
+
+  input-container .input-area-switch .dropdown-icon,
+  input-container .input-area-switch .dropdown-icon mat-icon {
+    color: var(--local-gemini-muted) !important;
+  }
+
+  input-container .input-area-switch .dropdown-icon mat-icon {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+    min-height: 0 !important;
+  }
+
+  /* Hide the Gemini AI disclaimer and reclaim its layout space. */
+  input-container > hallucination-disclaimer {
+    display: none !important;
+  }
+
+  /* One typography policy for prose, emphasis, headings and composer labels. */
+  message-content .markdown :is(pre, code, kbd, samp),
+  message-content .markdown :is(pre, code, kbd, samp) :where(*) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+    font-variation-settings: normal !important;
+  }
+
+  user-query .query-text :is(p, span, div, a, em):not(mat-icon *, gem-icon *, svg *, strong *, b *) {
+    font-family: var(--local-gemini-font) !important;
+    font-variation-settings: normal !important;
+    font-weight: inherit !important;
+    font-size: inherit !important;
+  }
+
+  input-container .ql-editor :is(p, span, div):not(strong *, b *, code *) {
+    font-family: var(--local-gemini-font) !important;
+    font-variation-settings: normal !important;
+    font-weight: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+  }
+
+  input-container .picker-primary-text,
+  input-container .input-area-switch,
+  input-container .input-area-switch .picker-primary-text,
+  rich-textarea .ql-editor.ql-blank::before {
+    font-weight: var(--local-gemini-ui-weight) !important;
+  }
+
+  body.dark-theme user-query :is(.luminous-toggle-button, .luminous-actions-container button) {
+    color: #aaa !important;
+  }
+
+  body.dark-theme user-query :is(.luminous-toggle-button, .luminous-actions-container button):hover {
+    background: rgb(255 255 255 / 8%) !important;
+  }
+
+  /* Desktop conversation layout: floating composer lets messages remain visible behind it; the helper reserves room to reach the final message. */
+  @media (min-width: 1000px) {
+    chat-window .chat-container:has(user-query) > input-container {
+      position: absolute !important;
+      inset-inline: 0 !important;
+      bottom: 0 !important;
+      z-index: 10 !important;
+      background: transparent !important;
+      pointer-events: none !important;
+    }
+
+    chat-window .chat-container:has(user-query) > input-container > * {
+      pointer-events: auto;
+    }
+
+    chat-window .chat-container:has(user-query) infinite-scroller.chat-history {
+      padding-bottom: calc(var(--local-gemini-composer-offset, 96px) + 20px) !important;
+      scroll-padding-bottom: var(--local-gemini-composer-offset, 96px) !important;
+    }
+
+    /* Reduce chat top padding by 10px (72px to 62px). */
+    chat-window infinite-scroller.chat-history {
+      padding-top: 62px !important;
+    }
+
+    /* Use the final requested conversation width of 850px. */
+    chat-window .conversation-container {
+      max-width: var(--local-gemini-conversation-width) !important;
+      width: min(100%, var(--local-gemini-conversation-width)) !important;
+      margin-inline: auto !important;
+    }
+
+    chat-window user-query {
+      max-width: 100% !important;
+    }
+
+    chat-window input-container .input-area-container {
+      box-sizing: border-box !important;
+      width: min(100%, var(--local-gemini-composer-width)) !important;
+      max-width: var(--local-gemini-composer-width) !important;
+      margin-inline: auto !important;
+    }
+
+    chat-window input-container {
+      padding-bottom: 20px !important;
+    }
+  }
+
+  /* Print uses normal document flow and readable white / black surfaces. */
+  @media print {
+    chat-window .chat-container:has(user-query) > input-container {
+      position: static !important;
+    }
+
+    body, main.chat-app, chat-window, input-container {
+      background: white !important;
+    }
+    message-content .markdown, user-query .query-text {
+      color: black !important;
+    }
+  }
+}
