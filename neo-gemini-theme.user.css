@@ -1,5 +1,5 @@
 /* ==UserStyle==
-@name           Gemini — ChatGPT-inspired theme
+@name           Neo Gemini Theme
 @namespace      local.gemini.theme
 @version        0.5.8
 @description    Local presentation-only theme. No scripts or external resources.
@@ -7,7 +7,7 @@
 ==/UserStyle== */
 
 @-moz-document domain("gemini.google.com") {
-  /* Theme settings: ChatGPT system font, white surfaces, orange prompt bubbles, and your chosen weights and widths. */
+  /* Theme settings: system font, white surfaces, orange prompt bubbles, and your chosen weights and widths. */
   body {
     --local-gemini-font: -apple-system-body, ui-sans-serif, -apple-system,
       system-ui, "Segoe UI", Helvetica, "Apple Color Emoji", Arial,
