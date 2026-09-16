@@ -29,4 +29,6 @@ It applies CSS in the browser and uses a local helper to size the text composer,
 
 With that being said, would be happy to take down if prompted! Reach out to https://x.com/sandeepvsk10
 
+<br>
+
 Made with GPT-5.6 Sol.
