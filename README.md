@@ -26,6 +26,7 @@ This project is a personal, local interface customization created only to improv
 
 It applies CSS in the browser and uses a local helper to size the text composer, it is not intended to modify Gemini's code, bypass controls, scrape content, automate requests, or interfere with Google services. Gemini and related marks belong to Google.
 
+
 With that being said, would be happy to take down if prompted! Reach out to https://x.com/sandeepvsk10
 
-Thanks
+Made with GPT-5.6 Sol.
