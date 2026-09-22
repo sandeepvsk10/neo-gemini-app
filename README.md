@@ -1,5 +1,7 @@
 # Stripped down Gemini app for cleaner UI/UX
 
+Implemented this because I do genuinely love Gemini model for research & ideation but the poor UI/UX makes it unusable
+
 ## App UI
 
 | Before UI script changes | After UI script changes |
