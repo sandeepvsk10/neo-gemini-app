@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Neo Gemini Theme
 @namespace      local.gemini.theme
-@version        0.5.8
+@version        0.5.17
 @description    Local presentation-only theme. No scripts or external resources.
 @author         Local
 ==/UserStyle== */
@@ -34,6 +34,11 @@
     --local-gemini-body-line-height: 1.4;
     --local-gemini-chat-selected: #efefef;
     --local-gemini-chat-hover: #f5f5f5;
+    --local-gemini-code-surface: #f3f3f3;
+    --local-gemini-code-text: #1f1f1f;
+    --local-gemini-code-border: rgb(0 0 0 / 5%);
+    --local-gemini-inline-code-surface: #ececec;
+    --local-gemini-inline-code-text: #0d0d0d;
   }
 
   /* Use the same system font across the interface; reset Gemini variable-font axes so font weights actually apply. */
@@ -75,6 +80,11 @@
     --local-gemini-muted: #aaaaaa;
     --local-gemini-chat-selected: #303030;
     --local-gemini-chat-hover: #262626;
+    --local-gemini-code-surface: #2f2f2f;
+    --local-gemini-code-text: #ececec;
+    --local-gemini-code-border: rgb(255 255 255 / 8%);
+    --local-gemini-inline-code-surface: #2f2f2f;
+    --local-gemini-inline-code-text: #ececec;
   }
 
   body, main.chat-app, chat-window, input-container {
@@ -159,6 +169,153 @@
 
   message-content .markdown :is(pre, code) {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  }
+
+  /* Inline code: compact rectangular chips measured from the reference UI. */
+  message-content .markdown code:not([data-test-id="code-content"]) {
+    display: inline !important;
+    margin: 0 !important;
+    padding: 2.4px 4.8px !important;
+    border: 0 !important;
+    border-radius: 4px !important;
+    background: var(--local-gemini-inline-code-surface) !important;
+    color: var(--local-gemini-inline-code-text) !important;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+      "Liberation Mono", monospace !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 26px !important;
+    vertical-align: baseline !important;
+    box-decoration-break: clone !important;
+    -webkit-box-decoration-break: clone !important;
+  }
+
+  /* Gemini's response-element host is inline by default, so vertical margins
+     around code cards inside list items otherwise have no visible effect. */
+  message-content .markdown response-element:has(> code-block) {
+    display: block !important;
+  }
+
+  /* Code blocks: light elevated surface, compact header, and reliable space before following prose. */
+  message-content .markdown code-block {
+    display: block !important;
+    margin: 0 !important;
+  }
+
+  message-content .markdown code-block .code-block {
+    margin: 0 !important;
+    border-radius: 24px !important;
+  }
+
+  message-content .markdown code-block .formatted-code-block-internal-container {
+    overflow: clip !important;
+    padding: 0 !important;
+    border: 1px solid var(--local-gemini-code-border) !important;
+    border-radius: 24px !important;
+    background: var(--local-gemini-code-surface) !important;
+  }
+
+  message-content .markdown code-block .code-block-decoration {
+    min-height: 48px !important;
+    box-sizing: border-box !important;
+    padding: 6px 8px 6px 20px !important;
+    background: var(--local-gemini-code-surface) !important;
+    color: var(--local-gemini-code-text) !important;
+  }
+
+  /* Add the compact code glyph shown before the language label. */
+  message-content .markdown code-block .code-block-decoration > span:first-child {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-family: var(--local-gemini-font) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+
+  message-content .markdown code-block .code-block-decoration > span:first-child::before {
+    content: "</>" !important;
+    display: inline-block !important;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+      "Liberation Mono", monospace !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    letter-spacing: -1.25px !important;
+    color: currentColor !important;
+  }
+
+  message-content .markdown code-block :is(.code-block-decoration, .buttons, button, mat-icon) {
+    color: var(--local-gemini-code-text) !important;
+  }
+
+  message-content .markdown code-block pre {
+    margin: 0 !important;
+    overflow-x: auto !important;
+    background: var(--local-gemini-code-surface) !important;
+  }
+
+  message-content .markdown code-block code[data-test-id="code-content"] {
+    display: block !important;
+    box-sizing: border-box !important;
+    min-width: max-content !important;
+    padding: 12px 20px 18px !important;
+    background: transparent !important;
+    color: var(--local-gemini-code-text) !important;
+  }
+
+  /* Chat-style light syntax palette mapped onto Gemini's Highlight.js token classes. */
+  message-content .markdown code-block :is(.hljs-keyword, .hljs-selector-tag, .hljs-tag, .hljs-doctag) {
+    color: #a626a4 !important;
+  }
+
+  message-content .markdown code-block :is(.hljs-built_in, .hljs-title, .hljs-title.function_, .hljs-name, .hljs-section) {
+    color: #ac4f23 !important;
+  }
+
+  message-content .markdown code-block :is(.hljs-string, .hljs-attr, .hljs-template-tag, .hljs-template-variable, .hljs-addition) {
+    color: #0b7a75 !important;
+  }
+
+  message-content .markdown code-block :is(.hljs-variable, .hljs-params, .hljs-property, .hljs-attribute) {
+    color: #1f6feb !important;
+  }
+
+  message-content .markdown code-block :is(.hljs-number, .hljs-literal, .hljs-symbol, .hljs-bullet) {
+    color: #b8802b !important;
+  }
+
+  message-content .markdown code-block :is(.hljs-comment, .hljs-quote, .hljs-deletion) {
+    color: #6a737d !important;
+    font-style: italic !important;
+  }
+
+  message-content .markdown code-block :is(.hljs-meta, .hljs-meta .hljs-keyword) {
+    color: #5c6370 !important;
+  }
+
+  body.dark-theme message-content .markdown code-block :is(.hljs-keyword, .hljs-selector-tag, .hljs-tag, .hljs-doctag) {
+    color: #ff79c6 !important;
+  }
+
+  body.dark-theme message-content .markdown code-block :is(.hljs-built_in, .hljs-title, .hljs-title.function_, .hljs-name, .hljs-section) {
+    color: #ff7b72 !important;
+  }
+
+  body.dark-theme message-content .markdown code-block :is(.hljs-string, .hljs-attr, .hljs-template-tag, .hljs-template-variable, .hljs-addition) {
+    color: #a5d6ff !important;
+  }
+
+  body.dark-theme message-content .markdown code-block :is(.hljs-variable, .hljs-params, .hljs-property, .hljs-attribute) {
+    color: #79c0ff !important;
+  }
+
+  body.dark-theme message-content .markdown code-block :is(.hljs-number, .hljs-literal, .hljs-symbol, .hljs-bullet) {
+    color: #d2a8ff !important;
+  }
+
+  body.dark-theme message-content .markdown code-block :is(.hljs-comment, .hljs-quote, .hljs-deletion, .hljs-meta, .hljs-meta .hljs-keyword) {
+    color: #8b949e !important;
   }
 
   /* Submitted prompts use your preferred orange tint instead of green. */
@@ -454,16 +611,91 @@
     box-shadow: none !important;
   }
 
-  message-content .markdown p {
-    margin-block: 0 16px !important;
+  /* One vertical rhythm for top-level prose. Gemini's own 40px section margins
+     made headings and lists too remote, while the old blanket paragraph rule
+     added excess space inside every list item. */
+  /* Use :where here too: a stronger reset would defeat every later gap rule. */
+  message-content .markdown > :where(p, ul, ol, h1, h2, h3, h4, h5, h6, response-element, blockquote, table, .horizontal-scroll-wrapper, hr) {
+    margin-block: 0 !important;
+  }
+
+  /* Keep the default gap low-specificity so the pairing rules below can win. */
+  message-content .markdown > :where(p, ul, ol, h1, h2, h3, h4, h5, h6, response-element, blockquote, table, .horizontal-scroll-wrapper, hr)
+    + :where(p, ul, ol, h1, h2, h3, h4, h5, h6, response-element, blockquote, table, .horizontal-scroll-wrapper, hr) {
+    margin-block-start: 16px !important;
+  }
+
+  message-content .markdown > :is(h1, h2, h3, h4, h5, h6):not(:first-child) {
+    margin-block-start: 16px !important;
+  }
+
+  /* Give a new section room after prose or a list, including numbered headings. */
+  message-content .markdown > :is(p, ul, ol, response-element, .horizontal-scroll-wrapper)
+    + :is(h2, h3, h4) {
+    margin-block-start: 28px !important;
+  }
+
+  message-content .markdown > :is(h1, h2, h3, h4, h5, h6)
+    + :is(p, ul, ol, response-element, blockquote, table, .horizontal-scroll-wrapper) {
+    margin-block-start: 8px !important;
+  }
+
+  message-content .markdown > response-element:has(> code-block) + :is(p, ul, ol) {
+    margin-block-start: 8px !important;
+  }
+
+  message-content .markdown > :is(ul, ol) + p {
+    margin-block-start: 8px !important;
+  }
+
+  /* Gemini puts tables inside a scroll-wrapper div rather than a table sibling. */
+  message-content .markdown > :is(p, ul, ol) + :is(blockquote, table, .horizontal-scroll-wrapper) {
+    margin-block-start: 4px !important;
+  }
+
+  message-content .markdown > :is(blockquote, table, .horizontal-scroll-wrapper) + :is(p, ul, ol) {
+    margin-block-start: 8px !important;
+  }
+
+  message-content .markdown > hr {
+    margin-block: 28px !important;
+  }
+
+  message-content .markdown > hr + :is(p, ul, ol, h1, h2, h3, h4, h5, h6, response-element, blockquote, table, .horizontal-scroll-wrapper) {
+    margin-block-start: 0 !important;
   }
 
   message-content .markdown :is(ul, ol) {
     padding-inline-start: 24px !important;
   }
 
+  /* List item paragraphs share their item's spacing; nested lists get one
+     deliberate inset instead of inheriting the top-level paragraph gap. */
   message-content .markdown li {
-    margin-block: 8px !important;
+    margin-block: 0 !important;
+  }
+
+  /* Keep a visible gap between every pair of bullets, including nested lists.
+     The previous 0px sibling rule left ordinary bullets crowded together. */
+  message-content .markdown li + li {
+    margin-block-start: 8px !important;
+  }
+
+  message-content .markdown li > p {
+    margin-block: 0 !important;
+  }
+
+  message-content .markdown li > p + p,
+  message-content .markdown li > :is(ul, ol) {
+    margin-block-start: 8px !important;
+  }
+
+  message-content .markdown li > response-element:has(> code-block) {
+    margin-block: 12px 8px !important;
+  }
+
+  message-content .markdown li > response-element:has(> code-block) + p {
+    margin-block-start: 8px !important;
   }
 
   message-content .markdown ul,
