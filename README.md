@@ -20,6 +20,23 @@ Implemented this because I do genuinely love Gemini model for research & ideatio
 
 Disable the Stylus style and Tampermonkey userscript to restore Gemini's original interface.
 
+## Copy this prompt for a computer use agent
+
+```text
+You are setting up a visual UI customization for the Gemini web app in my Chrome browser. Use this repository:
+https://github.com/sandeepvsk10/neo-gemini-app
+
+1. Read README.md and inspect both files before enabling anything:
+   - neo-gemini-theme.user.css
+   - gemini-composer-sizing.user.js
+2. Sanity-check the files for backdoors or unexpected behavior. Confirm that the CSS and userscript do not make network requests, scrape or transmit page data, inject remote code, change account settings, bypass controls, or automate messages. Check the userscript metadata, permissions, external URLs, eval-like code, and any fetch/XHR/WebSocket usage. If anything suspicious or broader than local presentation and composer sizing is found, stop and report it instead of installing.
+3. Install Stylus and Tampermonkey only from their official Chrome Web Store pages. Do not install similarly named extensions from other sources.
+4. In Stylus, create or update a Gemini-only style and paste the complete contents of neo-gemini-theme.user.css. Save it and confirm it is enabled for gemini.google.com.
+5. In Tampermonkey, create or update a userscript and paste the complete contents of gemini-composer-sizing.user.js. Save it. In chrome://extensions, open Tampermonkey's Details and enable “Allow User Scripts” if it is not already enabled.
+6. Reload Gemini and verify that the theme is active, the composer resizes normally, and sending a prompt still works. Do not send, delete, or edit any real conversation content during testing; use a temporary chat or a harmless local check.
+7. Report what was installed, what permissions were observed, what security checks passed, and any step that requires my manual confirmation. Never enter or reveal passwords, cookies, API keys, or other private data.
+```
+
 ## Disclaimer
 
 This project is a personal, local interface customization created only to improve readability and comfort. 
