@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Neo Gemini Theme
 @namespace      local.gemini.theme
-@version        0.5.17
+@version        0.5.23
 @description    Local presentation-only theme. No scripts or external resources.
 @author         Local
 ==/UserStyle== */
@@ -39,6 +39,11 @@
     --local-gemini-code-border: rgb(0 0 0 / 5%);
     --local-gemini-inline-code-surface: #ececec;
     --local-gemini-inline-code-text: #0d0d0d;
+    --local-gemini-thinking-base: #999999;
+    --local-gemini-thinking-glow: #292929;
+    --local-gemini-edit-surface: #ececec;
+    --local-gemini-edit-action: #0d0d0d;
+    --local-gemini-edit-action-text: #ffffff;
   }
 
   /* Use the same system font across the interface; reset Gemini variable-font axes so font weights actually apply. */
@@ -85,6 +90,77 @@
     --local-gemini-code-border: rgb(255 255 255 / 8%);
     --local-gemini-inline-code-surface: #2f2f2f;
     --local-gemini-inline-code-text: #ececec;
+    --local-gemini-thinking-base: #858585;
+    --local-gemini-thinking-glow: #f1f1f1;
+    --local-gemini-edit-surface: #303030;
+    --local-gemini-edit-action: #ececec;
+    --local-gemini-edit-action-text: #171717;
+  }
+
+  /* The actual dots are a sibling of pending-response, not its static text loader.
+     Style this transient component so the label disappears with the native spinner. */
+  chat-window thinking-dots-animation {
+    position: relative !important;
+    display: block !important;
+    width: max-content !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 28px !important;
+    margin-inline: 0 auto !important;
+    align-self: flex-start !important;
+    justify-self: start !important;
+    text-align: start !important;
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    font-size: 0 !important;
+  }
+
+  /* Hide the Lottie SVG only; leave Gemini's separate live status announcements intact. */
+  chat-window thinking-dots-animation > .thinking-dots-animation {
+    display: none !important;
+  }
+
+  chat-window thinking-dots-animation::before {
+    content: "Thinking" !important;
+    display: inline-block !important;
+    font-family: var(--local-gemini-font) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 28px !important;
+    letter-spacing: normal !important;
+    background-image: linear-gradient(90deg,
+      var(--local-gemini-thinking-base) 0%,
+      var(--local-gemini-thinking-base) 35%,
+      var(--local-gemini-thinking-glow) 50%,
+      var(--local-gemini-thinking-base) 65%,
+      var(--local-gemini-thinking-base) 100%) !important;
+    background-size: 250% 100% !important;
+    background-position: 100% 50%;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+    animation: local-gemini-thinking-wave 1.8s linear infinite !important;
+  }
+
+  chat-window thinking-dots-animation::after {
+    content: none !important;
+  }
+
+  @keyframes local-gemini-thinking-wave {
+    from { background-position: 100% 50%; }
+    to { background-position: 0% 50%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    chat-window thinking-dots-animation::before {
+      animation: none !important;
+      background-image: none !important;
+      color: var(--local-gemini-thinking-base) !important;
+      -webkit-text-fill-color: var(--local-gemini-thinking-base) !important;
+    }
   }
 
   body, main.chat-app, chat-window, input-container {
@@ -318,6 +394,114 @@
     color: #8b949e !important;
   }
 
+  /* Editing a sent prompt: keep Gemini's native 484px edit-bubble limit and right alignment. */
+  user-query-content.edit-mode > .user-query-container.edit-mode {
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 484px !important;
+    margin-inline: auto 0 !important;
+    /* Separate the edit panel from the assistant response below it. */
+    margin-block-end: 24px !important;
+    align-self: flex-end !important;
+    min-width: 0 !important;
+    padding: 16px !important;
+    background: var(--local-gemini-edit-surface) !important;
+    border-radius: 24px !important;
+    color: var(--local-gemini-text) !important;
+  }
+
+  user-query-content.edit-mode :is(.query-content.edit-mode, .edit-container, .edit-form) {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  user-query-content.edit-mode :is(.mat-mdc-text-field-wrapper, .mat-mdc-form-field-infix) {
+    padding: 0 !important;
+    min-height: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  user-query-content.edit-mode .mdc-notched-outline {
+    display: none !important;
+  }
+
+  /* Remove the empty Material hint spacer, but retain any validation messages. */
+  user-query-content.edit-mode .mat-mdc-form-field-subscript-wrapper:not(:has(mat-error, mat-hint)) {
+    display: none !important;
+  }
+
+  user-query-content.edit-mode textarea {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-height: 56px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: var(--local-gemini-text) !important;
+    caret-color: var(--local-gemini-text) !important;
+    font-family: var(--local-gemini-font) !important;
+    font-size: 16px !important;
+    font-weight: var(--local-gemini-body-weight) !important;
+    font-variation-settings: normal !important;
+    line-height: 24px !important;
+  }
+
+  user-query-content.edit-mode .edit-button-area {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    gap: 8px !important;
+    margin: 16px 0 0 !important;
+    padding: 0 !important;
+  }
+
+  user-query-content.edit-mode .edit-button-area :is(.cancel-button, .update-button) {
+    margin: 0 !important;
+  }
+
+  user-query-content.edit-mode .edit-button-area button {
+    min-width: 0 !important;
+    height: 36px !important;
+    padding: 0 16px !important;
+    border: 1px solid var(--local-gemini-border) !important;
+    border-radius: 999px !important;
+    background: var(--local-gemini-page) !important;
+    color: var(--local-gemini-text) !important;
+    box-shadow: none !important;
+  }
+
+  user-query-content.edit-mode .edit-button-area button :is(.mdc-button__label, .gds-body-m) {
+    color: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+
+  user-query-content.edit-mode .update-button button {
+    background: var(--local-gemini-edit-action) !important;
+    border-color: transparent !important;
+    color: var(--local-gemini-edit-action-text) !important;
+  }
+
+  user-query-content.edit-mode .edit-button-area button:disabled {
+    opacity: 0.4 !important;
+  }
+
+  user-query-content.edit-mode .edit-button-area button:focus-visible {
+    outline: 2px solid var(--local-gemini-text) !important;
+    outline-offset: 2px !important;
+  }
+
   /* Submitted prompts use your preferred orange tint instead of green. */
   user-query .user-query-bubble-with-background {
     background: var(--local-gemini-bubble) !important;
@@ -352,6 +536,12 @@
 
   user-query :is(.luminous-toggle-button, .luminous-actions-container button):hover {
     background: rgb(0 0 0 / 5%) !important;
+  }
+
+  /* Keep the rounded-square button highlight; suppress Material's circular hover/click overlay.
+     The separate keyboard-focus indicator and touch target remain available. */
+  user-query .luminous-actions-container button :is(.mat-mdc-button-persistent-ripple, .mat-mdc-button-ripple) {
+    opacity: 0 !important;
   }
 
   user-query .luminous-actions-container {
