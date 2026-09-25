@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Neo Gemini Theme
 @namespace      local.gemini.theme
-@version        0.5.23
+@version        0.5.24
 @description    Local presentation-only theme. No scripts or external resources.
 @author         Local
 ==/UserStyle== */
@@ -830,8 +830,18 @@
     margin-block-start: 8px !important;
   }
 
+  /* Increase the space after code cards by 50% across following content types. */
   message-content .markdown > response-element:has(> code-block) + :is(p, ul, ol) {
-    margin-block-start: 8px !important;
+    margin-block-start: 12px !important;
+  }
+
+  message-content .markdown > response-element:has(> code-block)
+    + :is(response-element, blockquote, table, .horizontal-scroll-wrapper, h1, h5, h6) {
+    margin-block-start: 24px !important;
+  }
+
+  message-content .markdown > response-element:has(> code-block) + :is(h2, h3, h4) {
+    margin-block-start: 42px !important;
   }
 
   message-content .markdown > :is(ul, ol) + p {
@@ -881,11 +891,11 @@
   }
 
   message-content .markdown li > response-element:has(> code-block) {
-    margin-block: 12px 8px !important;
+    margin-block: 12px 12px !important;
   }
 
   message-content .markdown li > response-element:has(> code-block) + p {
-    margin-block-start: 8px !important;
+    margin-block-start: 12px !important;
   }
 
   message-content .markdown ul,
