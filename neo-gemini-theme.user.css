@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Neo Gemini Theme
 @namespace      local.gemini.theme
-@version        0.5.31
+@version        0.5.32
 @description    Local presentation-only theme. No scripts or external resources.
 @author         Local
 ==/UserStyle== */
@@ -21,7 +21,7 @@
     --local-gemini-bubble: #fff0e2;
     --local-gemini-muted: #8f8f8f;
     --local-gemini-body-weight: 410;
-    --local-gemini-bold-weight: 700;
+    --local-gemini-bold-weight: 650;
     --local-gemini-heading-weight: 600;
     --local-gemini-ui-weight: 500;
     --local-gemini-conversation-width: 850px;
@@ -987,7 +987,7 @@
     font-weight: var(--local-gemini-body-weight) !important;
   }
 
-  /* Keep intentional emphasis at 700 while ordinary text uses 410. */
+  /* Keep intentional emphasis at 650 while ordinary text uses 410. */
   message-content .markdown :is(strong, b) {
     font-weight: var(--local-gemini-bold-weight) !important;
   }
