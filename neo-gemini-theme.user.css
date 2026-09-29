@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Neo Gemini Theme
 @namespace      local.gemini.theme
-@version        0.5.24
+@version        0.5.26
 @description    Local presentation-only theme. No scripts or external resources.
 @author         Local
 ==/UserStyle== */
@@ -124,6 +124,28 @@
 
   chat-window thinking-dots-animation::before {
     content: "Thinking" !important;
+  }
+
+  /* Gemini puts live activity (such as web search) beside Thinking by default.
+     Stack it below and keep both labels aligned with the response text. */
+  chat-window thinking-overlay {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 2px !important;
+  }
+
+  chat-window thinking-overlay .thinking-container {
+    align-self: flex-start !important;
+    width: max-content !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    text-align: left !important;
+  }
+
+  /* Reuse the same left-to-right glow for Gemini's live activity label. */
+  chat-window thinking-dots-animation::before,
+  chat-window thinking-overlay [data-test-id="thinking-overlay-content"] > span {
     display: inline-block !important;
     font-family: var(--local-gemini-font) !important;
     font-size: 14px !important;
@@ -155,7 +177,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    chat-window thinking-dots-animation::before {
+    chat-window thinking-dots-animation::before,
+    chat-window thinking-overlay [data-test-id="thinking-overlay-content"] > span {
       animation: none !important;
       background-image: none !important;
       color: var(--local-gemini-thinking-base) !important;
@@ -799,6 +822,11 @@
     content: none !important;
     background: none !important;
     box-shadow: none !important;
+  }
+
+  /* Leave breathing room after the final response element before its action buttons. */
+  model-response .response-container-footer {
+    margin-block-start: 16px !important;
   }
 
   /* One vertical rhythm for top-level prose. Gemini's own 40px section margins
