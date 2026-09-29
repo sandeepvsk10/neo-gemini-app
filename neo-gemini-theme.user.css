@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Neo Gemini Theme
 @namespace      local.gemini.theme
-@version        0.5.32
+@version        0.5.33
 @description    Local presentation-only theme. No scripts or external resources.
 @author         Local
 ==/UserStyle== */
@@ -30,8 +30,8 @@
     --local-gemini-leading-width: 40px;
     --local-gemini-control-gap: 8px;
     --local-gemini-prompt-preview: 264px;
-    /* Tighter prose spacing: 16px font × 1.4 = 22.4px; composer spacing is separate. */
-    --local-gemini-body-line-height: 1.4;
+    /* Prose spacing: 16px font × 1.6 = 25.6px; composer spacing is separate. */
+    --local-gemini-body-line-height: 1.6;
     --local-gemini-chat-selected: #efefef;
     --local-gemini-chat-hover: #f5f5f5;
     --local-gemini-code-surface: #f3f3f3;
